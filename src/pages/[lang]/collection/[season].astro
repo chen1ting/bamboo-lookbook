@@ -1,0 +1,14 @@
+---
+import SeasonView from '../../../components/SeasonView.astro';
+import { langPaths } from '../../../lib/routes';
+import type { Lang } from '../../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  season: string;
+}
+
+export const getStaticPaths = () => langPaths(true);
+---
+
+<SeasonView lang={Astro.props.lang} season={Astro.props.season} />

@@ -1,0 +1,23 @@
+{
+  "season": "2026-spring-summer",
+  "date": "2026-03-01",
+  "seasonLabel": {
+    "en": "Spring Summer '26",
+    "zh": "2026 春夏",
+    "it": "Primavera Estate '26"
+  },
+  "tag": {
+    "en": "NOW AVAILABLE",
+    "zh": "现已上市",
+    "it": "DISPONIBILE ORA"
+  },
+  "coverImage": "https://placehold.co/800x1200/F7F5F0/4A5D45?text=SS26+Cover",
+  "images": [
+    { "url": "https://placehold.co/1200x1800/F7F5F0/4A5D45?text=Look+1", "alt": "look 1", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/8B9D83?text=Look+2", "alt": "look 2", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/2B2B26?text=Look+3", "alt": "look 3", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/4A5D45?text=Look+4", "alt": "look 4", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/8B9D83?text=Look+5", "alt": "look 5", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/2B2B26?text=Look+6", "alt": "look 6", "width": 1200, "height": 1800 }
+  ]
+}

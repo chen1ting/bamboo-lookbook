@@ -1,0 +1,22 @@
+{
+  "season": "2025-autumn-winter",
+  "date": "2025-09-15",
+  "seasonLabel": {
+    "en": "Autumn Winter '25",
+    "zh": "2025 秋冬",
+    "it": "Autunno Inverno '25"
+  },
+  "tag": {
+    "en": "ARCHIVE",
+    "zh": "往季回顾",
+    "it": "ARCHIVIO"
+  },
+  "coverImage": "https://placehold.co/800x1200/F7F5F0/2B2B26?text=AW25+Cover",
+  "images": [
+    { "url": "https://placehold.co/1200x1800/F7F5F0/2B2B26?text=Look+1", "alt": "look 1", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/4A5D45?text=Look+2", "alt": "look 2", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/8B9D83?text=Look+3", "alt": "look 3", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/2B2B26?text=Look+4", "alt": "look 4", "width": 1200, "height": 1800 },
+    { "url": "https://placehold.co/1200x1800/F7F5F0/4A5D45?text=Look+5", "alt": "look 5", "width": 1200, "height": 1800 }
+  ]
+}

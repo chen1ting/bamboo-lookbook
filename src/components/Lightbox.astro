@@ -1,0 +1,29 @@
+---
+// Wires PhotoSwipe onto every <PhotoGrid /> on the page (swipe / zoom / captions).
+// No markup of its own — PhotoSwipe renders into a portal on <body>.
+---
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  function initLightboxes() {
+    document.querySelectorAll<HTMLElement>('[data-photo-grid]').forEach((el) => {
+      if (el.dataset.pswpBound === '1') return;
+      el.dataset.pswpBound = '1';
+
+      const lightbox = new PhotoSwipeLightbox({
+        gallery: el,
+        children: 'a',
+        pswpModule: () => import('photoswipe'),
+        showHideAnimationType: 'fade',
+        bgOpacity: 0.96,
+        padding: { top: 40, bottom: 40, left: 24, right: 24 },
+      });
+
+      lightbox.init();
+    });
+  }
+
+  document.addEventListener('astro:page-load', initLightboxes);
+</script>

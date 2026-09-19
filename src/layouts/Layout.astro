@@ -1,0 +1,113 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import BambooIcon from '../components/BambooIcon.astro';
+import { t, languages, localizedPath, type Lang } from '../i18n/utils';
+import { site } from '../lib/site';
+import '../styles/global.css';
+
+export interface Props extends Record<string, unknown> {
+  lang: Lang;
+  title?: string;
+  description?: string;
+}
+
+const { lang, title, description } = Astro.props;
+// Named props are consumed here; anything else reaches the page through `...rest`.
+const rest = Astro.props;
+const tr = t(lang);
+const pageTitle = title ?? tr('site.title');
+const pageDescription = description ?? tr('site.description');
+const { htmlLang } = languages[lang];
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+ <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Noto+Serif+SC:wght@300;400;600&display=swap"
+    />
+
+    <ClientRouter />
+ </head>
+
+ <body>
+    <Nav lang={lang} />
+
+    <main>
+      <slot {...rest} />
+    </main>
+
+    <footer class="footer container">
+      <span class="footer-mark" aria-hidden="true"><BambooIcon size={16} /></span>
+      <div class="footer-meta">
+        <span>&copy; {new Date().getFullYear()} BAMBOO. {tr('footer.rights')}</span>
+        <span><a href={`mailto:${site.email}`}>{site.email}</a></span>
+      </div>
+      <a class="footer-contact" href={localizedPath(lang, '/contact')}>{tr('footer.contact')} &rarr;</a>
+    </footer>
+ </body>
+</html>
+
+<style>
+  main {
+    display: block;
+    padding-bottom: 96px;
+  }
+
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 28px;
+    padding-top: 28px;
+    padding-bottom: 40px;
+    border-top: 1px solid var(--line);
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .footer-mark {
+    color: var(--bamboo-light);
+  }
+
+  .footer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+  }
+
+  .footer-meta a:hover {
+    color: var(--bamboo-dark);
+  }
+
+  .footer-contact {
+    margin-left: auto;
+    color: var(--bamboo-dark);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s var(--ease);
+  }
+
+  .footer-contact:hover {
+    border-bottom-color: var(--bamboo-dark);
+  }
+
+  @media (max-width: 640px) {
+    .footer-contact {
+      margin-left: 0;
+    }
+  }
+</style>

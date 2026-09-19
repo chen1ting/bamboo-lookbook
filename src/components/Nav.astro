@@ -1,0 +1,265 @@
+---
+import BambooIcon from './BambooIcon.astro';
+import { t, languages, localizedPath, stripLocale, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tr = t(lang);
+
+// Keep the visitor on the same page when switching language.
+const basePath = stripLocale(Astro.url.pathname);
+const menu = [
+  { href: localizedPath(lang, '/lookbook'), label: tr('nav.lookbook') },
+  { href: localizedPath(lang, '/process'), label: tr('nav.process') },
+  { href: localizedPath(lang, '/about'), label: tr('nav.about') },
+  { href: localizedPath(lang, '/contact'), label: tr('nav.contact') },
+];
+// Driven by the locale registry, so a new language shows up here automatically.
+const altLocales = (Object.keys(languages) as Lang[]).map((code) => ({
+  code,
+  label: languages[code].label,
+  href: localizedPath(code, basePath),
+}));
+---
+
+<header class="nav" data-nav>
+ <div class="nav-inner container">
+    <a class="brand" href={localizedPath(lang, '/')} aria-label="Bamboo">
+      <BambooIcon size={20} />
+      <span class="brand-name">BAMBOO</span>
+    </a>
+
+    <nav class="menu" aria-label={tr('nav.menu')}>
+      {menu.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+
+    <div class="nav-tail">
+      <div class="langs">
+        {altLocales.map((alt, i) => (
+          <>
+            {i > 0 && <span class="lang-sep" aria-hidden="true">/</span>}
+            <a
+              href={alt.href}
+              class:list={['lang', { active: alt.code === lang }]}
+              aria-current={alt.code === lang ? 'true' : undefined}
+              hreflang={alt.code}>
+              {alt.label}
+            </a>
+          </>
+        ))}
+      </div>
+
+      <button class="burger" type="button" data-burger aria-label={tr('nav.menu')} aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+ </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: transparent;
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+  }
+
+  .nav.is-stuck {
+    background: rgba(247, 245, 240, 0.86);
+    border-bottom-color: var(--line);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 74px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--bamboo-dark);
+  }
+
+  .brand-name {
+    font-size: 0.82rem;
+    letter-spacing: 0.34em;
+    color: var(--ink);
+  }
+
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    font-size: 0.82rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .menu a {
+    position: relative;
+    padding-bottom: 3px;
+    color: var(--ink);
+    opacity: 0.85;
+    transition: opacity 0.3s var(--ease), color 0.3s var(--ease);
+  }
+
+  .menu a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background: var(--bamboo-dark);
+    transition: width 0.4s var(--ease);
+  }
+
+  .menu a:hover {
+    opacity: 1;
+    color: var(--bamboo-dark);
+  }
+
+  .menu a:hover::after {
+    width: 100%;
+  }
+
+  .nav-tail {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .langs {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  .lang {
+    transition: color 0.3s var(--ease);
+  }
+
+  .lang:hover {
+    color: var(--bamboo-dark);
+  }
+
+  .lang.active {
+    color: var(--bamboo-dark);
+    font-weight: 600;
+  }
+
+  .lang-sep {
+    opacity: 0.5;
+  }
+
+  .burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .burger span {
+    display: block;
+    height: 1px;
+    width: 20px;
+    background: var(--ink);
+    transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+  }
+
+  @media (max-width: 760px) {
+    .burger {
+      display: flex;
+    }
+
+    .menu {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 74px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      padding: 0 20px;
+      background: var(--paper);
+      border-bottom: 1px solid transparent;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s var(--ease);
+    }
+
+    .nav.open .menu {
+      max-height: 300px;
+      border-bottom-color: var(--line);
+    }
+
+    .menu a {
+      width: 100%;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .menu a::after {
+      display: none;
+    }
+
+    .nav.open .burger span:first-child {
+      transform: translateY(3px) rotate(45deg);
+    }
+
+    .nav.open .burger span:last-child {
+      transform: translateY(-3px) rotate(-45deg);
+    }
+  }
+</style>
+
+<script>
+  function markStuck() {
+    const nav = document.querySelector<HTMLElement>('[data-nav]');
+    if (!nav) return;
+    nav.classList.toggle('is-stuck', window.scrollY > 8);
+  }
+
+  function setup() {
+    const nav = document.querySelector<HTMLElement>('[data-nav]');
+    const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+    if (!nav || !burger || burger.dataset.bound === '1') return;
+    burger.dataset.bound = '1';
+
+    burger.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+    });
+
+    nav.querySelectorAll('.menu a').forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    window.addEventListener('scroll', markStuck, { passive: true });
+    markStuck();
+  }
+
+  document.addEventListener('astro:page-load', setup);
+</script>

@@ -1,0 +1,92 @@
+---
+export interface GalleryImage {
+  url: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+}
+
+interface Props {
+  images: GalleryImage[];
+  /** id used by the lightbox to group the anchors */
+  id?: string;
+}
+
+const { images, id = 'gallery' } = Astro.props;
+const FALLBACK = { width: 1200, height: 1800 };
+---
+
+{images.length === 0 ? (
+ <slot name="empty">
+    <p class="empty">—</p>
+ </slot>
+) : (
+ <div class="photo-grid" id={id} data-photo-grid>
+    {images.map((image) => (
+      <a
+        class="photo-item"
+        href={image.url}
+        data-pswp-width={image.width ?? FALLBACK.width}
+        data-pswp-height={image.height ?? FALLBACK.height}
+        target="_blank"
+        rel="noopener"
+      >
+        <img src={image.url} alt={image.alt ?? ''} loading="lazy" decoding="async" />
+      </a>
+    ))}
+ </div>
+)}
+
+<style>
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* generous gutters — open, airy "eastern" composition */
+    gap: 64px 48px;
+    margin: 0;
+  }
+
+  .photo-item {
+    display: block;
+    overflow: hidden;
+    cursor: zoom-in;
+  }
+
+  .photo-item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease), opacity 0.5s var(--ease);
+  }
+
+  .photo-item:hover img {
+    transform: scale(1.02);
+  }
+
+  .empty {
+    color: var(--muted);
+    letter-spacing: 0.12em;
+  }
+
+  @media (min-width: 1100px) {
+    .photo-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 72px 56px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .photo-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 40px 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .photo-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
+    }
+  }
+</style>

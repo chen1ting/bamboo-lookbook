@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.local
+
+# local-only assets
+raw-images/
+public/mock-cdn/
+
+.DS_Store
+*.log

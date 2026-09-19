@@ -1,0 +1,9 @@
+---
+import ProcessView from '../../components/ProcessView.astro';
+import { langPaths } from '../../lib/routes';
+import type { Lang } from '../../i18n/utils';
+
+export const getStaticPaths = () => langPaths();
+---
+
+<ProcessView lang={Astro.props.lang as Lang} />

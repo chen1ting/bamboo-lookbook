@@ -1,0 +1,9 @@
+---
+import ContactView from '../../components/ContactView.astro';
+import { langPaths } from '../../lib/routes';
+import type { Lang } from '../../i18n/utils';
+
+export const getStaticPaths = () => langPaths();
+---
+
+<ContactView lang={Astro.props.lang as Lang} />

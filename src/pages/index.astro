@@ -1,0 +1,7 @@
+---
+// "/" → "/en/": every locale is prefixed, so the site root just forwards to the
+// default one. (localizedPath() adds the prefix for the default locale too.)
+import { localizedPath, defaultLang } from '../i18n/utils';
+
+return Astro.redirect(localizedPath(defaultLang, '/'), 301);
+---

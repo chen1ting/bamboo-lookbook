@@ -1,0 +1,195 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { t, localizedPath, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tr = t(lang);
+
+// Numbered so the vertical bamboo rule can thread through them in order.
+const steps = [1, 2, 3, 4, 5].map((n) => ({
+  n: String(n).padStart(2, '0'),
+  name: tr(`process.step${n}.name`),
+  body: tr(`process.step${n}.body`),
+}));
+---
+
+<Layout lang={lang} title={`${tr('process.title')} — BAMBOO`} description={tr('process.subtitle')}>
+ <section class="head container">
+    <h1 class="title">{tr('process.title')}</h1>
+    <p class="lede">{tr('process.subtitle')}</p>
+ </section>
+
+ <section class="steps container">
+    <span class="stalk" aria-hidden="true"></span>
+    {steps.map((step) => (
+      <article class="step">
+        <span class="node" aria-hidden="true">{step.n}</span>
+        <div class="step-body">
+          <h2 class="step-name">{step.name}</h2>
+          <p class="step-text">{step.body}</p>
+        </div>
+      </article>
+    ))}
+ </section>
+
+ <section class="cta container">
+    <a class="cta-link" href={localizedPath(lang, '/contact')}>
+      <span>{tr('about.contactCta')}</span>
+      <span class="arrow" aria-hidden="true">&rarr;</span>
+    </a>
+ </section>
+</Layout>
+
+<style>
+  .head {
+    padding-top: 92px;
+    padding-bottom: 84px;
+  }
+
+  .title {
+    font-size: clamp(2.2rem, 6.5vw, 4.4rem);
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+  }
+
+  .lede {
+    margin: 24px 0 0;
+    max-width: 52ch;
+    color: var(--muted);
+  }
+
+  .steps {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+    padding-bottom: 24px;
+  }
+
+  /* The culm: one vertical rule the step nodes sit on. */
+  .stalk {
+    position: absolute;
+    left: 15px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--line);
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 0 32px;
+    align-items: start;
+  }
+
+  .node {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    color: var(--bamboo-dark);
+    transition: border-color 0.4s var(--ease), background 0.4s var(--ease), color 0.4s var(--ease);
+  }
+
+  .step:hover .node {
+    background: var(--bamboo-dark);
+    border-color: var(--bamboo-dark);
+    color: var(--paper);
+  }
+
+  .step-name {
+    font-size: clamp(1.25rem, 2.6vw, 1.65rem);
+    letter-spacing: 0.05em;
+  }
+
+  .step-text {
+    margin: 12px 0 0;
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .cta {
+    padding-top: 88px;
+    padding-bottom: 40px;
+  }
+
+  .cta-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding-left: 22px;
+    font-size: 0.76rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--bamboo-dark);
+  }
+
+  /* Same node-growth hover as the lookbook cards. */
+  .cta-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 1px;
+    height: 0;
+    background: var(--bamboo-dark);
+    transform: translateY(-50%);
+    transition: height 0.4s var(--ease);
+  }
+
+  .cta-link:hover::before {
+    height: 26px;
+  }
+
+  .arrow {
+    transition: transform 0.4s var(--ease);
+  }
+
+  .cta-link:hover .arrow {
+    transform: translateX(5px);
+  }
+
+  @media (max-width: 760px) {
+    .head {
+      padding-top: 56px;
+      padding-bottom: 52px;
+    }
+
+    .steps {
+      gap: 52px;
+    }
+
+    .step {
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 0 20px;
+    }
+
+    .node {
+      width: 26px;
+      height: 26px;
+      font-size: 0.55rem;
+    }
+
+    .stalk {
+      left: 12px;
+    }
+
+    .cta {
+      padding-top: 60px;
+    }
+  }
+</style>

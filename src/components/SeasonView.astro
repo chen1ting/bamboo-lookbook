@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import PhotoGrid from './PhotoGrid.astro';
+import Lightbox from './Lightbox.astro';
+import { t, pick, localizedPath, languages, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  season?: string;
+}
+
+const { lang, season } = Astro.props;
+// With no `season`, the newest entry is shown — this is what the bare
+// /collection routes fall back to.
+const galleries = (await getCollection('galleries')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const entry = season ? galleries.find((g) => g.data.season === season) : galleries[0];
+if (!entry) return Astro.redirect(localizedPath(lang, '/'));
+
+const tr = t(lang);
+const label = pick(entry.data.seasonLabel, lang)!;
+const date = entry.data.date;
+const dateText = date.toLocaleDateString(languages[lang].htmlLang, { year: 'numeric', month: 'long' });
+---
+
+<Layout
+  lang={lang}
+  title={`${label} — BAMBOO`}
+  description={`${label} · ${entry.data.images.length} ${tr('collection.looks')}`}
+>
+ <section class="head container">
+    <a class="back" href={localizedPath(lang, '/lookbook')}>&larr; {tr('collection.back')}</a>
+    <h1 class="title">{label}</h1>
+    <div class="meta">
+      <span>{dateText}</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span>{entry.data.images.length} {tr('collection.looks')}</span>
+    </div>
+ </section>
+
+ <section class="container">
+    {entry.data.images.length === 0 ? (
+      <p class="empty">{tr('collection.empty')}</p>
+    ) : (
+      <PhotoGrid images={entry.data.images} />
+    )}
+ </section>
+
+ <Lightbox />
+</Layout>
+
+<style>
+  .head {
+    padding-top: 92px;
+    padding-bottom: 72px;
+  }
+
+  .back {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.3s var(--ease);
+  }
+
+  .back:hover {
+    color: var(--bamboo-dark);
+  }
+
+  .title {
+    margin-top: 32px;
+    font-size: clamp(2.1rem, 6vw, 4rem);
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 18px;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--bamboo-light);
+  }
+
+  .empty {
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 760px) {
+    .head {
+      padding-top: 56px;
+      padding-bottom: 44px;
+    }
+  }
+</style>

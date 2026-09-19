@@ -1,0 +1,13 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LookbookList from '../../components/LookbookList.astro';
+import { langPaths } from '../../lib/routes';
+import { t, type Lang } from '../../i18n/utils';
+
+// Real locales plus a bare variant, so "/" and "/en/" both resolve.
+export const getStaticPaths = () => langPaths();
+---
+
+<Layout lang={Astro.props.lang as Lang} title={`${t(Astro.props.lang as Lang)('home.title')} — BAMBOO`}>
+ <LookbookList lang={Astro.props.lang as Lang} />
+</Layout>

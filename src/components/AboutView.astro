@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BambooIcon from './BambooIcon.astro';
+import { t, localizedPath, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tr = t(lang);
+const capabilities = [1, 2, 3, 4, 5].map((n) => tr(`about.cap${n}`));
+---
+
+<Layout lang={lang} title={`${tr('about.title')} — BAMBOO`} description={tr('about.lead')}>
+ <section class="head container">
+    <h1 class="title">{tr('about.title')}</h1>
+    <p class="lede">{tr('about.lead')}</p>
+ </section>
+
+ <section class="body container">
+    <div class="prose">
+      <p>{tr('about.body1')}</p>
+      <p>{tr('about.body2')}</p>
+    </div>
+    <span class="mark" aria-hidden="true"><BambooIcon size={54} /></span>
+ </section>
+
+ <section class="caps container">
+    <h2 class="caps-title">{tr('about.capabilities')}</h2>
+    <ul class="caps-list">
+      {capabilities.map((item) => <li>{item}</li>)}
+    </ul>
+    <a class="cta" href={localizedPath(lang, '/contact')}>{tr('about.contactCta')} &rarr;</a>
+ </section>
+</Layout>
+
+<style>
+  .head {
+    padding-top: 92px;
+    padding-bottom: 72px;
+  }
+
+  .title {
+    font-size: clamp(2.2rem, 6.5vw, 4.4rem);
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+  }
+
+  .lede {
+    margin: 24px 0 0;
+    max-width: 48ch;
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 56px;
+    align-items: start;
+    padding-bottom: 88px;
+  }
+
+  .prose p {
+    margin: 0 0 22px;
+    max-width: 66ch;
+    color: var(--muted);
+  }
+
+  .mark {
+    color: var(--bamboo-light);
+    opacity: 0.7;
+    padding-top: 6px;
+  }
+
+  .caps {
+    padding-top: 56px;
+    padding-bottom: 48px;
+    border-top: 1px solid var(--line);
+  }
+
+  .caps-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .caps-list {
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 14px;
+  }
+
+  .caps-list li {
+    position: relative;
+    padding-left: 26px;
+  }
+
+  /* A short bamboo node instead of a bullet. */
+  .caps-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.68em;
+    width: 12px;
+    height: 1px;
+    background: var(--bamboo-light);
+  }
+
+  .cta {
+    display: inline-block;
+    margin-top: 44px;
+    padding-bottom: 4px;
+    font-size: 0.76rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--bamboo-dark);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s var(--ease);
+  }
+
+  .cta:hover {
+    border-bottom-color: var(--bamboo-dark);
+  }
+
+  @media (max-width: 760px) {
+    .head {
+      padding-top: 56px;
+      padding-bottom: 44px;
+    }
+
+    .body {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+      padding-bottom: 56px;
+    }
+  }
+</style>

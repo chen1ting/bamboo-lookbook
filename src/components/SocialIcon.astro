@@ -1,0 +1,38 @@
+---
+// Minimal single-stroke glyphs, kept in the spirit of BambooIcon (the only other SVG).
+interface Props {
+  name: string;
+  size?: number;
+}
+const { name, size = 20 } = Astro.props;
+
+const paths: Record<string, string> = {
+  // Instagram: rounded square + lens + dot
+  instagram: 'M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm5 5.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm4.6-1.1h.01',
+  // WeChat: two overlapping speech bubbles
+  wechat: 'M9 5c-3.3 0-6 2.2-6 4.9 0 1.5.8 2.9 2.1 3.8L4.6 16l2.5-1.3c.6.2 1.2.3 1.9.3M15 9.5c3 0 5.5 2 5.5 4.5S18 18.5 15 18.5c-.6 0-1.2-.1-1.7-.3L11 19.5l.5-1.6c-1.2-.8-2-2-2-3.4 0-2.5 2.5-4.5 5.5-4.5Z',
+  // LinkedIn: frame + i + n
+  linkedin: 'M4 4h16v16H4zM8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4',
+  // Pinterest: pin
+  pinterest: 'M12 3a9 9 0 0 0-3.3 17.4M12 3a9 9 0 0 1 1.2 17.9M11 21l2.6-9.4a2.8 2.8 0 1 0-4.7 2.4',
+  // YouTube: rounded rect + play
+  youtube: 'M3 8.5A2.5 2.5 0 0 1 5.5 6h13A2.5 2.5 0 0 1 21 8.5v7A2.5 2.5 0 0 1 18.5 18h-13A2.5 2.5 0 0 1 3 15.5zM10.5 9.5l5 2.5-5 2.5z',
+  // TikTok: music note
+  tiktok: 'M14 3v10.5a3.5 3.5 0 1 1-3-3.46M14 3c0 2.5 2 4.5 4.5 4.5',
+};
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+ <path d={paths[name] ?? ''} />
+</svg>

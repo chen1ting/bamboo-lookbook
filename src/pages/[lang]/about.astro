@@ -1,0 +1,9 @@
+---
+import AboutView from '../../components/AboutView.astro';
+import { langPaths } from '../../lib/routes';
+import type { Lang } from '../../i18n/utils';
+
+export const getStaticPaths = () => langPaths();
+---
+
+<AboutView lang={Astro.props.lang as Lang} />

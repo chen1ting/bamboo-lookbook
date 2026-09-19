@@ -9,7 +9,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "upload": "node scripts/uploadPhoto.js"
+    "upload": "node scripts/uploadPhoto.js",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-preview": "npm run build && wrangler dev",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.658.0",
@@ -20,6 +23,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "wrangler": "^4.135.0"
   }
 }

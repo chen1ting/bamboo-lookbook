@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bamboo-lookbook",
+  "compatibility_date": "2026-09-18",
+
+  // Static-only Worker: no "main" entrypoint, so Wrangler deploys the contents of
+  // dist/ as static assets and never looks for dist/_worker.js.
+  // astro.config.mjs uses output: "static", so there is no SSR worker in this repo.
+  "assets": {
+    "directory": "dist",
+    "not_found_handling": "404-page",
+  },
+
+  "observability": {
+    "enabled": true,
+  },
+}

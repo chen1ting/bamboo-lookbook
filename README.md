@@ -121,12 +121,46 @@ new network. Every page links to Contact, so there is nothing else to update.
 新增社媒平台时，同时在 `SocialIcon.astro` 的 `paths` 里加一行图标路径。
 
 ### Deploy
-`npm run build` writes a static `dist/` — host it anywhere (Cloudflare Pages, Netlify, S3).
+`npm run build` writes a static `dist/` — host it anywhere (Netlify, S3, Cloudflare Pages).
 Point `site` in `astro.config.mjs` at your real domain and set the R2 public base URL in `.env`.
 Images stay on R2; the repo ships only the JSON manifests.
 
 Because output is `static`, pretty URLs come from directory indexes — make sure your host does
 not require a rewrite rule for `/en/lookbook/` (trailing slash).
+
+#### Cloudflare (Workers static assets)
+
+The repo ships a `wrangler.jsonc`, so deploying is one command — and the build command in the
+Cloudflare dashboard must be `npm run build` (not `npm run deploy`, which is for local use):
+
+```bash
+npm run deploy          # = npm run build && wrangler deploy
+```
+
+`wrangler.jsonc` declares `assets.directory: "dist"` and **no `main` entrypoint**. That is
+intentional: `output` is `static`, so there is no `dist/_worker.js`, and a `main` field would make
+Wrangler look for one and fail. The upload-scripts note: `wrangler deploy` re-runs the interactive
+"detected framework settings" wizard only when it *cannot* find a config file — keeping
+`wrangler.jsonc` committed is what stops it from re-running `astro add cloudflare` on every deploy
+and erroring on the missing `public/.assetsignore`.
+
+Also committed for that reason:
+
+- `public/.assetsignore` — the asset uploader to skip `_worker.js`; harmless for a
+  static-only build but required by Cloudflare's Astro integration.
+- `public/.gitkeep` — keeps the otherwise-empty `public/` in git. Without it, `public/` does not
+exist in a fresh clone and the Cloudflare setup step has nowhere to write `.assetsignore`.
+
+Other commands:
+
+```bash
+npm run cf-preview      # wrangler dev — serves dist/ exactly as Cloudflare will
+npm run cf-typegen      # regenerate worker-configuration.d.ts after editing wrangler.jsonc
+```
+
+The CLI needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in CI, or a prior
+`npx wrangler login` locally. 部署只需 `npm run deploy`；配置固定写在 `wrangler.jsonc`，
+避免 wrangler 每次都重新跑交互式设置。`public/` 必须被 git 跟踪，否则构建机上不存在该目录。
 
 ## Adding a language · 新增语言
 

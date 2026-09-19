@@ -1,0 +1,2 @@
+# Keeps the public/ directory in git even when it only holds generated assets.
+# `public/mock-cdn/` (dry-run output) is gitignored — see .gitignore.

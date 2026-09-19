@@ -1,0 +1,5 @@
+# Files here are excluded from the Cloudflare assets upload.
+# `astro add cloudflare` / `wrangler deploy` copy this into dist/ — if it is
+# missing, the deploy fails with "Missing file or directory: public/.assetsignore".
+# `_worker.js` is a Worker-only artifact and must never be served as a static asset.
+_worker.js
